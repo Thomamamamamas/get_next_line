@@ -7,14 +7,13 @@ int	main()
 	int		n;
 	char	*line;
 
-	fd = open("test.txt", O_RDONLY);
+	fd = open("test.txt", O_RDWR);
 	n = 0;
 	while(n < 5)
 	{
 		line= get_next_line(fd);
 		printf("%s", line);
 		n++;
-		free(line);
 	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: tcasale <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/06 16:02:04 by tcasale           #+#    #+#             */
-/*   Updated: 2021/11/08 16:45:12 by tcasale          ###   ########.fr       */
+/*   Updated: 2021/11/09 16:29:07 by tcasale          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef BUFF_SIZE
@@ -17,21 +17,23 @@
 
 char	*get_next_line(int fd)
 {
+	size_t		n;
 	static int	first;
-	static char	*file;
+	static char	file[BUFF_SIZE + 2];
 	char		*str;
 
 	if (first != 1)
 	{
-		file = (char *)malloc(sizeof(char) * BUFF_SIZE + 1);
-		if (fd < 0 || !file || read(fd, file,BUFF_SIZE) < 0)
-		{
-			printf("Erreur, read renvoie : %zd\n", read(fd, file, BUFF_SIZE));
+		n = 0;
+		if (fd < 0 || read(fd, file,BUFF_SIZE) < 0)
 			return (NULL);
-		}
+		while (file[n])
+			n++;
+		file[n] = '\0';
+		if (file[0] == '\0')
+			return (NULL);
 		first = 1;
-		file[BUFF_SIZE + 1] = '\0';
 	}
-	str = get_line_content(file);
+	str = gnl_search(fd, file);
 	return (str);
 }
