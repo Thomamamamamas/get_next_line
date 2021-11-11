@@ -6,7 +6,7 @@
 /*   By: tcasale <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 11:36:27 by tcasale           #+#    #+#             */
-/*   Updated: 2021/11/09 16:29:05 by tcasale          ###   ########.fr       */
+/*   Updated: 2021/11/11 17:58:53 by tcasale          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ size_t	ft_strlen_mode(const char *str, int mode, int start)
 	return (n);
 }
 
-char *ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin(char const *s1, char const *s2)
 {
 	size_t	n;
 	size_t	m;
@@ -64,38 +64,22 @@ char *ft_strjoin(char const *s1, char const *s2)
 	return (str);
 }
 
-char	*gnl_content(int fd, char *file, size_t n, int size)
+char	*ft_strdup(const char *s)
 {
-	char		*s1;
-	size_t		m;
+	char	*res;
+	int		len;
+	int		i;
 
-	s1 = (char *)malloc(sizeof(char) * size + 1);
-	m = 0;
-	while (m < size && file[n] && s1[m])
+	len = ft_strlen_mode(s, 0, 0);
+	res = (char *) malloc(sizeof(*s) * len + 1);
+	if (!res)
+		return (NULL);
+	i = 0;
+	while (s[i])
 	{
-		s1[m] = file[n];
-		m++;
-		n++;
+		res[i] = s[i];
+		i++;
 	}
-	s1[m] = '\0';
-	printf("%s\n", s1);
-	return (s1);
-}
-
-char	*gnl_search(int fd, char *file)
-{
-	static int		first;
-	static size_t	n;
-	size_t			size;
-	char			*s1;
-	char			*s2;
-	if (first != 1)
-	{
-		n = 0;
-		first = 1;
-	}
-	size = ft_strlen_mode(file, 1, n);
-	s1 = gnl_content(fd, file, n, size);
-	n = n + size;
-	return (s1);
+	res[i] = '\0';
+	return (res);
 }

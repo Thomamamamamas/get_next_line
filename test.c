@@ -9,7 +9,7 @@ int	main()
 
 	fd = open("test.txt", O_RDWR);
 	n = 0;
-	while(n < 5)
+	while(n < 1)
 	{
 		line= get_next_line(fd);
 		printf("%s", line);
