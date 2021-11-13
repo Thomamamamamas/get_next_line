@@ -6,7 +6,7 @@
 /*   By: tcasale <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/06 16:02:04 by tcasale           #+#    #+#             */
-/*   Updated: 2021/11/11 18:21:10 by tcasale          ###   ########.fr       */
+/*   Updated: 2021/11/13 17:24:34 by tcasale          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef BUFF_SIZE
@@ -39,7 +39,6 @@ void	*bufferLessThanLine(char *buff, char *s1)
 	s2 = get_line(buff);
 	n = ft_strlen_mode(s2, 1, 0);
 	str = ft_strjoin(s1, s2);
-	free(s1);
 	free(s2);
 	return (str);
 }
@@ -95,15 +94,13 @@ char	*get_next_line(int fd)
 
 	if (!buff[0])
 		read_res = read(fd, buff, BUFF_SIZE);
+	printf("read = %d\n", read_res);
+	printf("buffer = %s", buff);
 	if (fd < 0 || read_res < 0)
 		return (NULL);
 	if (read_res == 0)
-	{
 		return (NULL);
-	}
 	else
-	{
 		str = check_line(buff, fd);
-	}
 	return (str);
 }

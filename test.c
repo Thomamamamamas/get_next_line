@@ -7,12 +7,12 @@ int	main()
 	int		n;
 	char	*line;
 
-	fd = open("test.txt", O_RDWR);
+	fd = open("42_with_nl.txt", O_RDWR);
 	n = 0;
-	while(n < 1)
+	while (n < 5)
 	{
 		line= get_next_line(fd);
-		printf("%s", line);
+		printf("ligne %d = %s", n, line);
 		n++;
 	}
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: tcasale <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 11:36:27 by tcasale           #+#    #+#             */
-/*   Updated: 2021/11/11 17:58:53 by tcasale          ###   ########.fr       */
+/*   Updated: 2021/11/13 17:24:38 by tcasale          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ size_t	ft_strlen_mode(const char *str, int mode, int start)
 	return (n);
 }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin(char *s1, char *s2)
 {
 	size_t	n;
 	size_t	m;
