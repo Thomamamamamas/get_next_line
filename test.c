@@ -12,7 +12,7 @@ int	main()
 	while (n < 5)
 	{
 		line= get_next_line(fd);
-		printf("ligne %d = %s", n, line);
+		printf("%s", line);
 		n++;
 	}
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: tcasale <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/06 16:02:04 by tcasale           #+#    #+#             */
-/*   Updated: 2021/11/13 17:24:34 by tcasale          ###   ########.fr       */
+/*   Updated: 2021/11/17 10:59:46 by tcasale          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef BUFF_SIZE
@@ -15,92 +15,74 @@
 #include "get_next_line.h"
 #include <stdio.h>
 
-char	*updateBuffer(char *buff, int start)
-{
-	int	n;
 
-	n = 0;
-	while (buff[start])
-	{
-		buff[n] = buff[start];
-		n++;
-		start++;
-	}
-	buff[n] = '\0';
-	return (buff);
+size_t	linelen(char *buff, size_t start)
+{
+	size_t	len;
+
+	len = start + 1;
+	while (buff[len] && buff[len - 1] != '\n')
+		len++;
+	return (len - start);
 }
 
-void	*bufferLessThanLine(char *buff, char *s1)
+char	*linecpy(char *buff, size_t start)
 {
-	char	*str;
-	char	*s2;
-	int		n;
+	size_t	len;
+	char	*line;
 
-	s2 = get_line(buff);
-	n = ft_strlen_mode(s2, 1, 0);
-	str = ft_strjoin(s1, s2);
-	free(s2);
-	return (str);
-}
-
-char	*get_line(char *buff)
-{
-	int		n;
-	int		len;
-	char	*str;
-
-	n = 0;
-	len = ft_strlen_mode(buff, 1, 0);
-	str = (char *) malloc(sizeof(char) * BUFF_SIZE + 1);
-	if (!str)
+	len = linelen(buff, start);
+	line = (char *)malloc(sizeof(char) * len + 1);
+	if (!line)
 		return (NULL);
-	while (buff[n] && n < len)
-	{
-		str[n] = buff[n];
-		n++;
-	}
-	str[n] = '\0';
-	return (str);
+	ft_strncpy(line, buff, start, len);
+	return (line);
 }
 
-char	*check_line(char *buff, int fd)
+char	*linecomplete(char *buff, char *line, size_t len, int fd)
 {
-	int		n;
-	char	*str;
+	char	*newLine;
 	char	*tmp;
 
-	str = get_line(buff);
-	n = ft_strlen_mode(str, 0, 0);
-	updateBuffer(buff, n);
-	if (n == BUFF_SIZE)
+	while (read(fd, buff, BUFF_SIZE) > 0 && line[len] != '\n')
 	{
-		while (read(fd, buff, BUFF_SIZE) != 0 && str[n - 1] != '\n')
-		{
-			tmp = ft_strdup(str);
-			free(str);
-			str = bufferLessThanLine(buff, tmp);
-			free(tmp);
-			n = ft_strlen_mode(str, 0, 0);
-		}
+		tmp = linecpy(buff, 0);
+		newLine = ft_strjoin(line, tmp);
+		free(tmp);
+		free(line);
+		line = ft_strdup(newLine);
+		len = ft_strlen(line);
+		free(newLine);
 	}
-	return (str);
+	return (line);
 }
 
 char	*get_next_line(int fd)
 {
-	static char	buff[BUFF_SIZE + 1];
-	char		*str;
-	static int	read_res;
+	static char			buff[BUFF_SIZE + 1];
+	static size_t		len;
+	static size_t		first;
+	char				*line;
 
-	if (!buff[0])
-		read_res = read(fd, buff, BUFF_SIZE);
-	printf("read = %d\n", read_res);
-	printf("buffer = %s", buff);
-	if (fd < 0 || read_res < 0)
+	if (first != 1)
+	{
+		first = 1;
+		len = 0;
+		if (fd < 0 || read(fd, buff, BUFF_SIZE) <= 0)
+			return (NULL);
+	}
+	line = linecpy(buff, len);
+	len = len + ft_strlen(line);
+	if (len == BUFF_SIZE && line[len] != '\n')
+	{
+		line = linecomplete(buff, line, len, fd);
+		len = ft_strlen(line);
+		first = 0;
+	}
+	if (line[0] == '\0')
+	{
+		free(line);
 		return (NULL);
-	if (read_res == 0)
-		return (NULL);
-	else
-		str = check_line(buff, fd);
-	return (str);
+	}
+	return (line);
 }
