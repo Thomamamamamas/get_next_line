@@ -1,88 +1,60 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: tcasale <marvin@42.fr>                     +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/06 16:02:04 by tcasale           #+#    #+#             */
-/*   Updated: 2021/11/17 10:59:46 by tcasale          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-#ifndef BUFF_SIZE
-#define BUFF_SIZE 512
-#endif
 #include "get_next_line.h"
 #include <stdio.h>
 
-
-size_t	linelen(char *buff, size_t start)
+void	push_buffer(char **str, char **buffer, char **tmp)
 {
-	size_t	len;
-
-	len = start + 1;
-	while (buff[len] && buff[len - 1] != '\n')
-		len++;
-	return (len - start);
+	*tmp = ft_strjoin(*str, *buffer);
+	free(*str);
+	*str = ft_strdup(*tmp);
+	free(*tmp);
 }
 
-char	*linecpy(char *buff, size_t start)
+void	is_excess(char **str, char **excess)
 {
-	size_t	len;
-	char	*line;
-
-	len = linelen(buff, start);
-	line = (char *)malloc(sizeof(char) * len + 1);
-	if (!line)
-		return (NULL);
-	ft_strncpy(line, buff, start, len);
-	return (line);
+	*str = ft_strjoin(*str, *excess);
+	free(*excess);
+	*excess = 0;
 }
 
-char	*linecomplete(char *buff, char *line, size_t len, int fd)
+char	*linecpy(char **excess, char *str, char *tmp, int read_value)
 {
-	char	*newLine;
-	char	*tmp;
-
-	while (read(fd, buff, BUFF_SIZE) > 0 && line[len] != '\n')
+	if (read_value <= 0 && str[0] != 0)
+		return (str);
+	if (ft_strchr(str, '\n') >= 0)
 	{
-		tmp = linecpy(buff, 0);
-		newLine = ft_strjoin(line, tmp);
-		free(tmp);
-		free(line);
-		line = ft_strdup(newLine);
-		len = ft_strlen(line);
-		free(newLine);
+		tmp = ft_strndup(str, ft_strchr(str, '\n'));
+		*excess = ft_strdup(str + (ft_strchr(str, '\n') + 1));
+		free(str);
+		return (tmp);
 	}
-	return (line);
+	free(str);
+	return (NULL);
 }
 
 char	*get_next_line(int fd)
 {
-	static char			buff[BUFF_SIZE + 1];
-	static size_t		len;
-	static size_t		first;
-	char				*line;
+	static char	*excess;
+	char		*buffer;
+	char		*str;
+	char		*tmp;
+	int			read_value;
 
-	if (first != 1)
+	str = NULL;
+	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	if (fd < 0 || read(fd, buffer, 0) < 0)
 	{
-		first = 1;
-		len = 0;
-		if (fd < 0 || read(fd, buff, BUFF_SIZE) <= 0)
-			return (NULL);
-	}
-	line = linecpy(buff, len);
-	len = len + ft_strlen(line);
-	if (len == BUFF_SIZE && line[len] != '\n')
-	{
-		line = linecomplete(buff, line, len, fd);
-		len = ft_strlen(line);
-		first = 0;
-	}
-	if (line[0] == '\0')
-	{
-		free(line);
+		free(buffer);
 		return (NULL);
 	}
-	return (line);
+	read_value = 1;
+	is_excess(&str, &excess);
+	while ((read_value > 0) && ft_strchr(str, '\n') < 0)
+	{
+		read_value = read(fd, buffer, BUFFER_SIZE);
+		buffer[read_value] = '\0';
+		push_buffer(&str, &buffer, &tmp);
+	}
+	free(buffer);
+	str = linecpy(&excess, str, tmp, read_value);
+	return (str);
 }
