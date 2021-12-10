@@ -1,4 +1,4 @@
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*trimline(char *save)
 {
@@ -58,25 +58,25 @@ char	*restline(char *save)
 
 char	*get_next_line(int fd)
 {
-	static char	*save;
+	static char	*save[FD_MAX];
 	char		*line;
 	char		buf[BUFFER_SIZE + 1];
 	int			bytes_read;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	if (fd < 0 || BUFFER_SIZE <= 0 || fd > FD_MAX)
 		return (NULL);
 	bytes_read = 1;
-	while (bytes_read && !ft_strchr(save, '\n'))
+	while (bytes_read && !ft_strchr(save[fd], '\n'))
 	{
 		bytes_read = read(fd, buf, BUFFER_SIZE);
 		if (bytes_read == -1)
 			return (NULL);
 		buf[bytes_read] = 0;
-		save = ft_strjoin(save, buf);
-		if (!save)
+		save[fd] = ft_strjoin(save[fd], buf);
+		if (!save[fd])
 			return (NULL);
 	}
-	line = trimline(save);
-	save = restline(save);
+	line = trimline(save[fd]);
+	save[fd] = restline(save[fd]);
 	return (line);
 }
