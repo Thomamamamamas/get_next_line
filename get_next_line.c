@@ -1,6 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tcasale <tcasale@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/20 12:55:06 by tcasale           #+#    #+#             */
+/*   Updated: 2022/03/20 12:55:27 by tcasale          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #include "get_next_line.h"
 
-char	*trimline(char *save)
+char	*gnl_trimline(char *save)
 {
 	char	*line;
 	size_t	i;
@@ -28,7 +39,7 @@ char	*trimline(char *save)
 	return (line);
 }
 
-char	*restline(char *save)
+char	*gnl_restline(char *save)
 {
 	char	*line;
 	size_t	i;
@@ -40,7 +51,7 @@ char	*restline(char *save)
 		i++;
 	if (save[i])
 	{
-		line = malloc(sizeof(char) * (ft_strlen(save) - i + 1));
+		line = malloc(sizeof(char) * (gnl_ft_strlen(save) - i + 1));
 		if (!line)
 			return (NULL);
 		while (save[i])
@@ -66,17 +77,17 @@ char	*get_next_line(int fd)
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	bytes_read = 1;
-	while (bytes_read && !ft_strchr(save, '\n'))
+	while (bytes_read && !gnl_ft_strchr(save, '\n'))
 	{
 		bytes_read = read(fd, buf, BUFFER_SIZE);
 		if (bytes_read == -1)
 			return (NULL);
 		buf[bytes_read] = 0;
-		save = ft_strjoin(save, buf);
+		save = gnl_ft_strjoin(save, buf);
 		if (!save)
 			return (NULL);
 	}
-	line = trimline(save);
-	save = restline(save);
+	line = gnl_trimline(save);
+	save = gnl_restline(save);
 	return (line);
 }

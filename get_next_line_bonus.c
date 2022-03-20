@@ -1,6 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tcasale <tcasale@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/20 12:53:40 by tcasale           #+#    #+#             */
+/*   Updated: 2022/03/20 12:53:42 by tcasale          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #include "get_next_line_bonus.h"
 
-char	*trimline(char *save)
+char	*gnl_trimline(char *save)
 {
 	char	*line;
 	size_t	i;
@@ -28,7 +39,7 @@ char	*trimline(char *save)
 	return (line);
 }
 
-char	*restline(char *save)
+char	*gnl_restline(char *save)
 {
 	char	*line;
 	size_t	i;
@@ -40,7 +51,7 @@ char	*restline(char *save)
 		i++;
 	if (save[i])
 	{
-		line = malloc(sizeof(char) * (ft_strlen(save) - i + 1));
+		line = malloc(sizeof(char) * (gnl_ft_strlen(save) - i + 1));
 		if (!line)
 			return (NULL);
 		while (save[i])
@@ -66,17 +77,17 @@ char	*get_next_line(int fd)
 	if (fd < 0 || BUFFER_SIZE <= 0 || fd > FD_MAX)
 		return (NULL);
 	bytes_read = 1;
-	while (bytes_read && !ft_strchr(save[fd], '\n'))
+	while (bytes_read && !gnl_ft_strchr(save[fd], '\n'))
 	{
 		bytes_read = read(fd, buf, BUFFER_SIZE);
 		if (bytes_read == -1)
 			return (NULL);
 		buf[bytes_read] = 0;
-		save[fd] = ft_strjoin(save[fd], buf);
+		save[fd] = gnl_ft_strjoin(save[fd], buf);
 		if (!save[fd])
 			return (NULL);
 	}
-	line = trimline(save[fd]);
-	save[fd] = restline(save[fd]);
+	line = gnl_trimline(save[fd]);
+	save[fd] = gnl_restline(save[fd]);
 	return (line);
 }
