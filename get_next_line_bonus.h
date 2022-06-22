@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_bonus.h                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tcasale <tcasale@student.42.fr>            +#+  +:+       +#+        */
+/*   By: tcasale <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/20 12:55:33 by tcasale           #+#    #+#             */
-/*   Updated: 2022/06/22 16:34:29 by tcasale          ###   ########.fr       */
+/*   Created: 2022/06/22 16:54:11 by tcasale           #+#    #+#             */
+/*   Updated: 2022/06/22 16:54:14 by tcasale          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef GET_NEXT_LINE_BONUS_H
