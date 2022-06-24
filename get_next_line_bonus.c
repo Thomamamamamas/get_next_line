@@ -6,7 +6,7 @@
 /*   By: tcasale <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 16:53:53 by tcasale           #+#    #+#             */
-/*   Updated: 2022/06/22 16:53:55 by tcasale          ###   ########.fr       */
+/*   Updated: 2022/06/24 16:46:12 by tcasale          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "get_next_line_bonus.h"
@@ -69,12 +69,12 @@ char	*gnl_restline(char *save)
 
 char	*get_next_line(int fd)
 {
-	static char	*save[FD_MAX];
+	static char	*save[OPEN_MAX];
 	char		*line;
 	char		buf[BUFFER_SIZE + 1];
 	int			bytes_read;
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || fd > FD_MAX)
+	if (fd < 0 || BUFFER_SIZE <= 0 || fd > OPEN_MAX)
 		return (NULL);
 	bytes_read = 1;
 	while (bytes_read && !gnl_ft_strchr(save[fd], '\n'))

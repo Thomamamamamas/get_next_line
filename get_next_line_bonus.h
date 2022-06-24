@@ -6,15 +6,15 @@
 /*   By: tcasale <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 16:54:11 by tcasale           #+#    #+#             */
-/*   Updated: 2022/06/22 16:54:14 by tcasale          ###   ########.fr       */
+/*   Updated: 2022/06/24 16:42:50 by tcasale          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef GET_NEXT_LINE_BONUS_H
 # define GET_NEXT_LINE_BONUS_H
-# define FD_MAX 256
 
 # include <stdlib.h>
 # include <unistd.h>
+# include <limits.h>
 
 char	*get_next_line(int fd);
 char	*trimline(char *save);
