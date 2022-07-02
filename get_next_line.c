@@ -6,12 +6,12 @@
 /*   By: tcasale <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 16:53:15 by tcasale           #+#    #+#             */
-/*   Updated: 2022/06/22 16:53:19 by tcasale          ###   ########.fr       */
+/*   Updated: 2022/07/02 23:49:16 by tcasale          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "get_next_line.h"
 
-char	*gnl_trimline(char *save)
+char	*get_actual_line(char *save)
 {
 	char	*line;
 	size_t	i;
@@ -39,7 +39,7 @@ char	*gnl_trimline(char *save)
 	return (line);
 }
 
-char	*gnl_restline(char *save)
+char	*save_rest_line(char *save)
 {
 	char	*line;
 	size_t	i;
@@ -87,7 +87,7 @@ char	*get_next_line(int fd)
 		if (!save)
 			return (NULL);
 	}
-	line = gnl_trimline(save);
-	save = gnl_restline(save);
+	line = get_actual_line(save);
+	save = save_rest_line(save);
 	return (line);
 }

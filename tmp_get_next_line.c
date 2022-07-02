@@ -1,15 +1,15 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tcasale <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/22 16:53:53 by tcasale           #+#    #+#             */
-/*   Updated: 2022/07/02 23:50:55 by tcasale          ###   ########.fr       */
+/*   Created: 2022/06/22 16:53:15 by tcasale           #+#    #+#             */
+/*   Updated: 2022/07/02 23:36:55 by tcasale          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "get_next_line_bonus.h"
+#include "get_next_line.h"
 
 char	*get_actual_line(char *save)
 {
@@ -39,7 +39,7 @@ char	*get_actual_line(char *save)
 	return (line);
 }
 
-char	*save_next_line(char *save)
+char	*gnl_restline(char *save)
 {
 	char	*line;
 	size_t	i;
@@ -69,25 +69,25 @@ char	*save_next_line(char *save)
 
 char	*get_next_line(int fd)
 {
-	static char	*save[OPEN_MAX];
+	static char	*save;
 	char		*line;
 	char		buf[BUFFER_SIZE + 1];
 	int			bytes_read;
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || fd > OPEN_MAX)
+	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	bytes_read = 1;
-	while (bytes_read && !gnl_ft_strchr(save[fd], '\n'))
+	while (bytes_read && !gnl_ft_strchr(save, '\n'))
 	{
 		bytes_read = read(fd, buf, BUFFER_SIZE);
 		if (bytes_read == -1)
 			return (NULL);
 		buf[bytes_read] = 0;
-		save[fd] = gnl_ft_strjoin(save[fd], buf);
-		if (!save[fd])
+		save = gnl_ft_strjoin(save, buf);
+		if (!save)
 			return (NULL);
 	}
-	line = get_actual_line(save[fd]);
-	save[fd] = save_next_line(save[fd]);
+	line = get_actual_line(save);
+	save = gnl_restline(save);
 	return (line);
 }
